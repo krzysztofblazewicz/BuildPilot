@@ -53,14 +53,14 @@ const features = [
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#050505] text-white">
       <Navbar variant="marketing" />
 
       {/* HERO */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden hero-spotlight">
         <div
           aria-hidden
-          className="absolute inset-0 bg-grid opacity-60"
+          className="absolute inset-0 bg-grid opacity-50"
           style={{
             maskImage:
               "radial-gradient(ellipse at center, black 30%, transparent 75%)",
@@ -68,23 +68,19 @@ export default function Landing() {
               "radial-gradient(ellipse at center, black 30%, transparent 75%)",
           }}
         />
-        <div
-          aria-hidden
-          className="absolute left-1/2 top-0 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-indigo-600/20 blur-3xl"
-        />
-        <div className="relative mx-auto max-w-5xl px-6 pt-20 pb-24 text-center sm:pt-28 sm:pb-32">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-mono uppercase tracking-[0.2em] text-indigo-300 fade-up">
+        <div className="relative mx-auto max-w-5xl px-6 pt-24 pb-28 text-center sm:pt-32 sm:pb-36">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-3 py-1 text-xs font-mono uppercase tracking-[0.2em] text-zinc-400 fade-up">
             <Sparkles className="h-3.5 w-3.5" />
-            AI co-pilot for builders
+            Project planning, sharpened
           </div>
           <h1
             data-testid="hero-title"
-            className="font-heading text-4xl font-black leading-[0.95] tracking-tighter sm:text-6xl lg:text-7xl fade-up"
+            className="font-heading text-4xl font-black leading-[0.95] tracking-tighter sm:text-6xl lg:text-7xl text-white fade-up"
             style={{ animationDelay: "60ms" }}
           >
             Turn rough ideas into
             <br />
-            <span className="text-indigo-400">buildable</span> projects.
+            <span className="silver-text">buildable</span> projects.
           </h1>
           <p
             className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg fade-up"
@@ -100,7 +96,7 @@ export default function Landing() {
             <Link
               to="/signup"
               data-testid="hero-cta-start"
-              className="group inline-flex items-center gap-2 rounded-md bg-indigo-600 px-6 py-3 text-sm font-medium text-white transition-all hover:bg-indigo-500 hover:shadow-[0_0_36px_-4px_rgba(99,102,241,0.8)]"
+              className="btn-primary group inline-flex items-center gap-2 rounded-md px-6 py-3 text-sm font-medium"
             >
               Start Building
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -108,20 +104,20 @@ export default function Landing() {
             <a
               href="#demo"
               data-testid="hero-cta-demo"
-              className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.02] px-6 py-3 text-sm text-white transition-colors hover:border-white/30"
+              className="btn-secondary inline-flex items-center gap-2 rounded-md px-6 py-3 text-sm"
             >
               View Demo
             </a>
           </div>
-          <div className="mt-10 flex items-center justify-center gap-6 text-xs text-zinc-500 font-mono uppercase tracking-widest">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-mono uppercase tracking-widest text-zinc-500">
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> No credit card
+              <CheckCircle2 className="h-3.5 w-3.5 text-zinc-400" /> No credit card
             </span>
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> 60-second setup
+              <CheckCircle2 className="h-3.5 w-3.5 text-zinc-400" /> 60-second setup
             </span>
-            <span className="hidden sm:inline-flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> Free to try
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-zinc-400" /> Free to try
             </span>
           </div>
         </div>
@@ -129,12 +125,12 @@ export default function Landing() {
 
       {/* DEMO PREVIEW */}
       <section id="demo" className="relative mx-auto max-w-6xl px-6 pb-24">
-        <div className="relative rounded-xl border border-white/10 bg-zinc-950 p-2 shadow-[0_40px_120px_-30px_rgba(99,102,241,0.4)]">
-          <div className="rounded-lg border border-white/10 bg-[#0c0c10] p-6">
+        <div className="relative rounded-xl border border-white/10 bg-[#0a0a0a] p-2">
+          <div className="rounded-lg border border-white/10 bg-[#0d0d0d] p-6">
             <div className="mb-6 flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
-              <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
-              <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+              <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
+              <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
+              <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
               <span className="ml-3 font-mono text-xs uppercase tracking-widest text-zinc-500">
                 buildpilot / dashboard
               </span>
@@ -145,26 +141,25 @@ export default function Landing() {
                 { title: "FoundryKit", goal: "Startup", status: "Refined", feas: 74 },
                 { title: "GreenMile", goal: "Portfolio", status: "Draft", feas: 61 },
               ].map((p) => (
-                <div
-                  key={p.title}
-                  className="rounded-md border border-white/10 bg-zinc-900/60 p-4"
-                >
+                <div key={p.title} className="card-surface p-4">
                   <div className="flex items-start justify-between">
-                    <div className="font-heading text-base font-semibold">{p.title}</div>
-                    <span className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] font-mono uppercase tracking-widest text-zinc-300">
+                    <div className="font-heading text-base font-semibold text-white">
+                      {p.title}
+                    </div>
+                    <span className="rounded-full border border-white/15 bg-white/[0.04] px-2 py-0.5 text-[10px] font-mono uppercase tracking-widest text-zinc-300">
                       {p.status}
                     </span>
                   </div>
-                  <div className="mt-2 text-xs font-mono uppercase tracking-widest text-indigo-300">
+                  <div className="mt-2 font-mono text-xs uppercase tracking-widest text-zinc-500">
                     {p.goal}
                   </div>
                   <div className="mt-4 flex items-center justify-between">
                     <span className="text-xs text-zinc-500">Feasibility</span>
-                    <span className="font-mono text-sm text-white">{p.feas}%</span>
+                    <span className="font-mono text-sm text-zinc-100">{p.feas}%</span>
                   </div>
                   <div className="mt-1.5 h-1 rounded-full bg-white/5">
                     <div
-                      className="h-full rounded-full bg-indigo-500"
+                      className="h-full rounded-full bg-zinc-300"
                       style={{ width: `${p.feas}%` }}
                     />
                   </div>
@@ -178,24 +173,24 @@ export default function Landing() {
       {/* FEATURES — BENTO */}
       <section id="features" className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-12 max-w-2xl">
-          <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-indigo-300">
+          <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
             What you get
           </div>
-          <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
-            Everything you need to go from <span className="text-indigo-400">"what if"</span> to "let's build".
+          <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl text-white">
+            Everything you need to go from <span className="silver-text">"what if"</span> to "let's build".
           </h2>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
           {features.map(({ icon: Icon, title, body, span }, i) => (
             <div
               key={title}
-              className={`group relative overflow-hidden rounded-lg border border-white/10 bg-zinc-950 p-6 transition-all hover:-translate-y-1 hover:border-white/20 hover:shadow-xl hover:shadow-black/50 ${span}`}
+              className={`group relative overflow-hidden card-surface p-6 ${span}`}
               data-testid={`feature-card-${i}`}
             >
-              <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-md bg-indigo-600/10 ring-1 ring-indigo-500/20">
-                <Icon className="h-5 w-5 text-indigo-300" />
+              <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/[0.03]">
+                <Icon className="h-5 w-5 text-zinc-200" />
               </div>
-              <h3 className="font-heading text-xl font-semibold tracking-tight">
+              <h3 className="font-heading text-xl font-semibold tracking-tight text-white">
                 {title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">{body}</p>
@@ -207,10 +202,10 @@ export default function Landing() {
       {/* HOW IT WORKS */}
       <section id="how" className="mx-auto max-w-6xl px-6 py-20">
         <div className="mb-12">
-          <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-indigo-300">
+          <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
             How it works
           </div>
-          <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl text-white">
             Three steps. Then you build.
           </h2>
         </div>
@@ -220,11 +215,11 @@ export default function Landing() {
             { n: "02", t: "Generate the plan", b: "MVP scope, tech stack, 4-week roadmap, risks, idea score." },
             { n: "03", t: "Save & iterate", b: "Refine it, export it, and ship what actually matters." },
           ].map((s) => (
-            <div key={s.n} className="rounded-lg border border-white/10 bg-zinc-950 p-6">
+            <div key={s.n} className="surface p-6">
               <div className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
                 Step {s.n}
               </div>
-              <div className="mt-3 font-heading text-xl font-semibold">{s.t}</div>
+              <div className="mt-3 font-heading text-xl font-semibold text-white">{s.t}</div>
               <p className="mt-2 text-sm text-zinc-400">{s.b}</p>
             </div>
           ))}
@@ -233,11 +228,18 @@ export default function Landing() {
 
       {/* FINAL CTA */}
       <section className="mx-auto max-w-6xl px-6 pb-24">
-        <div className="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-zinc-950 to-black p-10 sm:p-14">
-          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-indigo-600/20 blur-3xl" />
+        <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] p-10 sm:p-14">
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 50% 50% at 90% 0%, rgba(255,255,255,0.08), transparent 70%)",
+            }}
+          />
           <div className="relative grid items-center gap-8 md:grid-cols-2">
             <div>
-              <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+              <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl text-white">
                 Pick the idea. We'll handle the plan.
               </h2>
               <p className="mt-3 text-zinc-400">
@@ -248,7 +250,7 @@ export default function Landing() {
               <Link
                 to="/signup"
                 data-testid="footer-cta-start"
-                className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-6 py-3 text-sm font-medium text-white transition-all hover:bg-indigo-500 hover:shadow-[0_0_36px_-4px_rgba(99,102,241,0.8)]"
+                className="btn-primary inline-flex items-center gap-2 rounded-md px-6 py-3 text-sm font-medium"
               >
                 Create your free account
                 <ArrowUpRight className="h-4 w-4" />

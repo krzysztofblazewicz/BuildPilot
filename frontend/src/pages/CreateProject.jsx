@@ -65,22 +65,22 @@ export default function CreateProject() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#050505] text-white">
       <Navbar variant="app" />
       <main className="mx-auto max-w-3xl px-6 py-10">
         <Link
           to="/dashboard"
           data-testid="create-back-link"
-          className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-zinc-500 hover:text-zinc-300"
+          className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-zinc-500 hover:text-zinc-200 transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to dashboard
         </Link>
         <div className="mt-4">
-          <div className="font-mono text-xs uppercase tracking-[0.2em] text-indigo-300">
+          <div className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
             New project
           </div>
-          <h1 className="mt-2 font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+          <h1 className="mt-2 font-heading text-3xl font-bold tracking-tight sm:text-4xl text-white">
             Describe your idea
           </h1>
           <p className="mt-2 text-sm text-zinc-400">
@@ -96,7 +96,7 @@ export default function CreateProject() {
               rows={4}
               value={form.idea}
               onChange={update("idea")}
-              className="textarea-base"
+              className="input-base min-h-[110px] resize-y"
               placeholder="A small app that helps CS students keep track of internship applications and their deadlines…"
             />
           </Field>
@@ -186,7 +186,7 @@ export default function CreateProject() {
               rows={3}
               value={form.notes}
               onChange={update("notes")}
-              className="textarea-base"
+              className="input-base min-h-[90px] resize-y"
               placeholder="Anything else BuildPilot should know? Vibes, references, constraints, dreams."
             />
           </Field>
@@ -194,51 +194,30 @@ export default function CreateProject() {
           {err && (
             <div
               data-testid="create-error"
-              className="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300"
+              className="rounded-md border border-white/15 bg-white/[0.03] px-3 py-2 text-sm text-zinc-200"
             >
               {err}
             </div>
           )}
 
           <div className="pt-4">
-            <div className="relative rounded-lg p-[1px] tracing-border">
-              <button
-                data-testid="generate-plan-button"
-                type="submit"
-                disabled={loading}
-                className="relative w-full rounded-lg bg-indigo-600 px-6 py-4 text-base font-semibold text-white transition-all hover:bg-indigo-500 disabled:opacity-90 disabled:cursor-progress"
-              >
-                <span className="inline-flex items-center gap-2">
-                  {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
-                  {loading ? LOADER_STEPS[step] : "Generate Build Plan"}
-                </span>
-              </button>
-            </div>
+            <button
+              data-testid="generate-plan-button"
+              type="submit"
+              disabled={loading}
+              className="btn-primary relative w-full rounded-lg px-6 py-4 text-base font-semibold"
+            >
+              <span className="inline-flex items-center justify-center gap-2">
+                {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
+                {loading ? LOADER_STEPS[step] : "Generate Build Plan"}
+              </span>
+            </button>
             <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-zinc-500">
               Mock AI for now · No keys required
             </p>
           </div>
         </form>
       </main>
-
-      <style>{`
-        .input-base, .textarea-base {
-          width: 100%;
-          border-radius: 0.375rem;
-          border: 1px solid rgba(255,255,255,0.1);
-          background: #18181b;
-          padding: 0.625rem 0.75rem;
-          font-size: 0.875rem;
-          color: white;
-          outline: none;
-          transition: border-color .15s, box-shadow .15s;
-        }
-        .input-base:focus, .textarea-base:focus {
-          border-color: #6366f1;
-          box-shadow: 0 0 0 1px #6366f1;
-        }
-        .textarea-base { resize: vertical; min-height: 90px; }
-      `}</style>
     </div>
   );
 }
@@ -246,9 +225,9 @@ export default function CreateProject() {
 function Field({ label, required, children }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-zinc-400">
+      <span className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-zinc-500">
         {label}
-        {required && <span className="ml-1 text-indigo-400">*</span>}
+        {required && <span className="ml-1 text-zinc-300">*</span>}
       </span>
       {children}
     </label>
@@ -264,7 +243,7 @@ function Select({ value, onChange, options, testId }) {
       className="input-base appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a1a1aa%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C/polyline%3E%3C/svg%3E')] bg-[length:14px_14px] bg-[right_10px_center] bg-no-repeat pr-9"
     >
       {options.map((o) => (
-        <option key={o} value={o} className="bg-zinc-900">
+        <option key={o} value={o} className="bg-[#0d0d0d]">
           {o}
         </option>
       ))}

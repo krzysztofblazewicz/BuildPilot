@@ -33,15 +33,15 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white grid lg:grid-cols-2">
+    <div className="min-h-screen bg-[#050505] text-white grid lg:grid-cols-2">
       <div className="flex min-h-screen flex-col px-6 py-10 lg:px-16">
         <Logo />
         <div className="flex flex-1 items-center">
           <div className="w-full max-w-md">
-            <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-indigo-300">
+            <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
               Create account
             </div>
-            <h1 className="font-heading text-4xl font-bold tracking-tight">
+            <h1 className="font-heading text-4xl font-bold tracking-tight text-white">
               Start building smarter.
             </h1>
             <p className="mt-2 text-sm text-zinc-400">
@@ -50,7 +50,7 @@ export default function Signup() {
 
             <form onSubmit={submit} className="mt-8 space-y-4">
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-zinc-400">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-zinc-500">
                   Name
                 </label>
                 <input
@@ -59,12 +59,12 @@ export default function Signup() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-sm text-white outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="input-base"
                   placeholder="Ada Lovelace"
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-zinc-400">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-zinc-500">
                   Email
                 </label>
                 <input
@@ -74,12 +74,12 @@ export default function Signup() {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-sm text-white outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="input-base"
                   placeholder="you@buildpilot.app"
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-zinc-400">
+                <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-zinc-500">
                   Password
                 </label>
                 <input
@@ -90,14 +90,14 @@ export default function Signup() {
                   autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-sm text-white outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="input-base"
                   placeholder="Min 6 characters"
                 />
               </div>
               {err && (
                 <div
                   data-testid="signup-error"
-                  className="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300"
+                  className="rounded-md border border-white/15 bg-white/[0.03] px-3 py-2 text-sm text-zinc-200"
                 >
                   {err}
                 </div>
@@ -106,7 +106,7 @@ export default function Signup() {
                 data-testid="signup-submit-button"
                 type="submit"
                 disabled={loading}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-3 text-sm font-medium text-white transition-all hover:bg-indigo-500 hover:shadow-[0_0_24px_-4px_rgba(99,102,241,0.7)] disabled:opacity-60"
+                className="btn-primary inline-flex w-full items-center justify-center gap-2 rounded-md px-4 py-3 text-sm font-medium"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
                 Create my account
@@ -118,7 +118,7 @@ export default function Signup() {
               <Link
                 to="/login"
                 data-testid="signup-to-login-link"
-                className="text-indigo-400 hover:text-indigo-300"
+                className="text-white underline-offset-4 hover:underline"
               >
                 Sign in
               </Link>
@@ -126,12 +126,19 @@ export default function Signup() {
           </div>
         </div>
       </div>
-      <div className="relative hidden lg:block overflow-hidden border-l border-white/10">
+      <div className="relative hidden lg:block overflow-hidden border-l border-white/10 bg-[#080808]">
         <div className="absolute inset-0 bg-grid opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-bl from-indigo-600/20 via-transparent to-black" />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 30% 60%, rgba(255,255,255,0.08), transparent 70%)",
+          }}
+        />
         <div className="absolute inset-0 flex items-center justify-center p-12">
           <div className="max-w-md">
-            <div className="font-mono text-xs uppercase tracking-[0.2em] text-indigo-300">
+            <div className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
               What you get
             </div>
             <ul className="mt-6 space-y-4 text-sm text-zinc-300">
@@ -143,7 +150,7 @@ export default function Signup() {
                 "Exportable plan ready to share",
               ].map((t) => (
                 <li key={t} className="flex items-start gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-indigo-400" />
+                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-zinc-300" />
                   <span>{t}</span>
                 </li>
               ))}

@@ -107,7 +107,7 @@ export default function Dashboard() {
         {/* Header */}
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <div className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+            <div className="font-mono text-xs uppercase tracking-[0.14em] text-zinc-400">
               {user?.name ? `Welcome back, ${user.name.split(" ")[0]}` : "Dashboard"}
             </div>
             <h1 className="mt-2 font-heading text-3xl font-bold tracking-tight sm:text-4xl text-white">
@@ -167,7 +167,7 @@ export default function Dashboard() {
             data-testid="dashboard-stage-breakdown"
             className="mt-4 flex flex-wrap items-center gap-2 surface p-3"
           >
-            <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+            <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-400">
               By stage
             </span>
             {Object.entries(stats.by_stage).map(([stage, count]) => (
@@ -208,7 +208,7 @@ export default function Dashboard() {
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+                        <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-400">
                           {p.goal_type}
                         </div>
                         <h3 className="mt-1.5 truncate font-heading text-lg font-semibold tracking-tight text-white">
@@ -240,7 +240,7 @@ export default function Dashboard() {
                     {buildScore != null && (
                       <div className="mt-4">
                         <div className="flex items-center justify-between">
-                          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+                          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-400">
                             Build score
                           </span>
                           <span className="font-mono text-sm text-zinc-100">{buildScore}%</span>
@@ -297,7 +297,7 @@ function StatCard({ icon: Icon, label, value, hint, testId }) {
   return (
     <div data-testid={testId} className="surface p-4">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-400">
           {label}
         </span>
         <Icon className="h-4 w-4 text-zinc-500" />

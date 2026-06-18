@@ -38,7 +38,7 @@ export default function Signup() {
         <Logo />
         <div className="flex flex-1 items-center">
           <div className="w-full max-w-md">
-            <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+            <div className="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-zinc-400">
               Create account
             </div>
             <h1 className="font-heading text-4xl font-bold tracking-tight text-white">
@@ -138,7 +138,7 @@ export default function Signup() {
         />
         <div className="absolute inset-0 flex items-center justify-center p-12">
           <div className="max-w-md">
-            <div className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+            <div className="font-mono text-xs uppercase tracking-[0.14em] text-zinc-400">
               What you get
             </div>
             <ul className="mt-6 space-y-4 text-sm text-zinc-300">

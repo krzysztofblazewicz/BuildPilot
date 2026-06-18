@@ -69,13 +69,13 @@ export default function Landing() {
           }}
         />
         <div className="relative mx-auto max-w-5xl px-6 pt-24 pb-28 text-center sm:pt-32 sm:pb-36">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-3 py-1 text-xs font-mono uppercase tracking-[0.2em] text-zinc-400 fade-up">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-3 py-1 text-xs font-mono uppercase tracking-[0.14em] text-zinc-400 fade-up">
             <Sparkles className="h-3.5 w-3.5" />
             Project planning, sharpened
           </div>
           <h1
             data-testid="hero-title"
-            className="font-heading text-4xl font-black leading-[0.95] tracking-tighter sm:text-6xl lg:text-7xl text-white fade-up"
+            className="font-heading text-4xl font-bold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl text-white fade-up"
             style={{ animationDelay: "60ms" }}
           >
             Turn rough ideas into
@@ -173,7 +173,7 @@ export default function Landing() {
       {/* FEATURES — BENTO */}
       <section id="features" className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-12 max-w-2xl">
-          <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+          <div className="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-zinc-400">
             What you get
           </div>
           <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl text-white">
@@ -202,7 +202,7 @@ export default function Landing() {
       {/* HOW IT WORKS */}
       <section id="how" className="mx-auto max-w-6xl px-6 py-20">
         <div className="mb-12">
-          <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+          <div className="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-zinc-400">
             How it works
           </div>
           <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl text-white">
@@ -216,7 +216,7 @@ export default function Landing() {
             { n: "03", t: "Save & iterate", b: "Refine it, export it, and ship what actually matters." },
           ].map((s) => (
             <div key={s.n} className="surface p-6">
-              <div className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+              <div className="font-mono text-xs uppercase tracking-[0.14em] text-zinc-400">
                 Step {s.n}
               </div>
               <div className="mt-3 font-heading text-xl font-semibold text-white">{s.t}</div>

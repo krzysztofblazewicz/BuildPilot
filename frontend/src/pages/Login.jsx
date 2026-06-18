@@ -37,7 +37,7 @@ export default function Login() {
         <Logo />
         <div className="flex flex-1 items-center">
           <div className="w-full max-w-md">
-            <div className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+            <div className="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-zinc-400">
               Welcome back
             </div>
             <h1 className="font-heading text-4xl font-bold tracking-tight text-white">
@@ -124,7 +124,7 @@ export default function Login() {
         />
         <div className="absolute inset-0 flex items-center justify-center p-12">
           <div className="max-w-md">
-            <div className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+            <div className="font-mono text-xs uppercase tracking-[0.14em] text-zinc-400">
               Pilot's log // entry 03
             </div>
             <p className="mt-4 font-heading text-2xl leading-tight tracking-tight text-zinc-100">

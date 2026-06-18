@@ -37,13 +37,19 @@ body {
     background: #050505;
     color: #f5f5f5;
     font-family:
-        "Manrope",
+        "Geist",
+        "Inter",
         ui-sans-serif,
         system-ui,
         -apple-system,
+        "Segoe UI",
         sans-serif;
+    font-feature-settings:
+        "ss01" on,
+        "cv11" on;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     color-scheme: dark;
 }
 
@@ -54,14 +60,20 @@ h4,
 h5,
 h6,
 .font-heading {
-    font-family: "Outfit", ui-sans-serif, system-ui, sans-serif;
-    letter-spacing: -0.02em;
+    font-family: "Geist", "Inter", ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+}
+
+h1 {
+    letter-spacing: -0.025em;
 }
 
 .font-mono,
 code,
 kbd {
     font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-feature-settings: "ss01" on;
 }
 
 /* Scrollbar */

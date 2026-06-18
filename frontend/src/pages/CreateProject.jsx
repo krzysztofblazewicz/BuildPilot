@@ -77,7 +77,7 @@ export default function CreateProject() {
           Back to dashboard
         </Link>
         <div className="mt-4">
-          <div className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
+          <div className="font-mono text-xs uppercase tracking-[0.14em] text-zinc-400">
             New project
           </div>
           <h1 className="mt-2 font-heading text-3xl font-bold tracking-tight sm:text-4xl text-white">

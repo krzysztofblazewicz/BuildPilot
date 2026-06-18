@@ -473,7 +473,7 @@ export default function ProjectDetail() {
             <h3 className="font-heading text-base font-semibold tracking-tight text-white">
               AI planning modes
             </h3>
-            <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+            <span className="ml-2 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-400">
               optional · mock outputs for now
             </span>
           </header>
@@ -497,7 +497,7 @@ export default function ProjectDetail() {
                     {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Icon className="h-3.5 w-3.5" />}
                     <span className="font-medium">{label}</span>
                   </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-400">
                     {done ? "Refresh" : "Run"}
                   </span>
                 </button>
@@ -876,7 +876,7 @@ function ExtendedScore({ score, className = "" }) {
             className="rounded-md border border-white/10 bg-[#101010] p-4"
           >
             <div className="flex items-center justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-400">
                 {e.label}
               </span>
               <span className="font-heading text-base font-bold text-white">{e.val ?? "—"}%</span>

@@ -1,0 +1,130 @@
+{
+  "theme_and_archetype": {
+    "theme": "dark",
+    "archetype": "4 (Swiss & High-Contrast)",
+    "description": "A premium, dark-by-default SaaS aesthetic tailored for developer tools and startups. Characterized by deep obsidian backgrounds, 1px subtle white borders, stark white typography, and a single, vibrant neon accent (Electric Indigo) for interactive and AI-driven elements."
+  },
+  "color_palette": {
+    "background": {
+      "base": "#0A0A0A",
+      "surface": "#141414",
+      "surface_elevated": "#1E1E1E"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "muted": "#52525B"
+    },
+    "border": {
+      "default": "rgba(255, 255, 255, 0.1)",
+      "hover": "rgba(255, 255, 255, 0.2)"
+    },
+    "primary": {
+      "DEFAULT": "#6366F1",
+      "foreground": "#FFFFFF",
+      "hover": "#4F46E5"
+    },
+    "accent": {
+      "DEFAULT": "#BEF264",
+      "foreground": "#000000",
+      "description": "Use sparingly for AI sparkles, Idea Scores, and critical 'magic' actions."
+    },
+    "status": {
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "error": "#EF4444"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Outfit",
+      "body": "Manrope",
+      "mono": "JetBrains Mono"
+    },
+    "google_fonts_url": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&family=Outfit:wght@300;500;700;900&display=swap",
+    "hierarchy": {
+      "h1": "text-5xl sm:text-6xl font-black tracking-tighter leading-none",
+      "h2": "text-3xl sm:text-4xl font-bold tracking-tight leading-tight",
+      "h3": "text-xl sm:text-2xl font-semibold tracking-tight",
+      "h4": "text-lg sm:text-xl font-medium",
+      "body": "text-base leading-relaxed text-zinc-400",
+      "small": "text-sm tracking-wide text-zinc-500",
+      "overline": "text-xs font-mono uppercase tracking-[0.2em] text-indigo-400"
+    }
+  },
+  "layout_and_spacing": {
+    "spacing_scale": "Tailwind standard, but scaled up (e.g., p-8 for cards, py-24 for sections). Containers with borders MUST have p-6 or p-8.",
+    "grid_strategy": {
+      "dashboard": "MODE B: THE CONTROL ROOM GRID. grid-cols-1 md:grid-cols-3 lg:grid-cols-4. gap-6. Every pixel utilized. h-full on children.",
+      "landing": "MODE A: THE TETRIS GRID. grid-cols-1 md:grid-cols-12 gap-8. Asymmetry and wide spans (e.g., col-span-8, col-span-4)."
+    },
+    "alignment": "Left-align paragraphs, inputs, and dense content. Headings can be centered in marketing hero, but strictly left-aligned in dashboard and forms."
+  },
+  "surfaces_and_micro_themes": {
+    "header": "Glassmorphism: bg-black/60 backdrop-blur-xl border-b border-white/10. Sticky top z-50.",
+    "cards": "Flat background (bg-zinc-950), 1px subtle border (border-white/10), no shadow. Hover: -translate-y-1, shadow-xl shadow-black/50, border-white/20.",
+    "ai_elements": "The Tracing Beam: For 'Generate Build Plan' or Idea Score cards, use an animated gradient border or subtle drop-shadow-[0_0_15px_rgba(99,102,241,0.5)].",
+    "inputs": "bg-zinc-900 border border-white/10 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-md."
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-3 rounded-md transition-all hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]",
+      "secondary": "bg-transparent border border-white/10 hover:border-white/30 text-white px-6 py-3 rounded-md transition-all",
+      "ai_magic": "bg-indigo-600 border border-indigo-400/50 text-white hover:bg-indigo-500 relative overflow-hidden"
+    },
+    "badges": "px-2.5 py-0.5 rounded-full text-xs font-mono border",
+    "shadcn_overrides": "Do NOT use default Shadcn border radius. Use rounded-md (6px) or rounded-lg (8px). Do NOT use card component for marketing pages, use raw divs."
+  },
+  "pages": {
+    "landing_page": {
+      "hero": "H1 text-6xl+, centered, overline above it. Abstract dark geometric background image heavily masked (bg-black/80) or with gradient overlay so text pops. 'Start Building' (Primary CTA) and 'View Demo' (Secondary).",
+      "features": "Bento grid layout. Use Lucide icons. Sections for Idea Validation, MVP Planning, Tech Stack, Risk Detection."
+    },
+    "auth": {
+      "layout": "Split screen. Left: Form. Right: Abstract code screen image or inspiring startup team image with black/50 overlay.",
+      "form": "Clean, left-aligned, standard Shadcn forms."
+    },
+    "dashboard": {
+      "layout": "Sidebar navigation (left) + main content area. Strict grid hierarchy. 'Project Cards' showing title, goal type badge, status badge, last updated. Open button on hover.",
+      "cards": "Use 'Control Room' grid styling. Flat, dense, highly scannable."
+    },
+    "create_project": {
+      "layout": "Multi-step or long-scroll multi-field form. Wide, single-column container max-w-3xl to ensure readability.",
+      "fields": "idea textarea, target user, problem, goal type, skill level, timeframe, preferred tech, team size, constraints, notes.",
+      "cta": "'Generate Build Plan' button with AI glow effect."
+    },
+    "project_detail": {
+      "layout": "Bento grid for plan sections. Idea score as a prominent widget (Top Right) with circular progress percentages.",
+      "sections": "Refined Name, Pitch, Problem Statement, Target Users, MVP Features, Nice-to-haves, Tech Stack, 4-Week Roadmap, Risks, Ethics, Next 3 Actions, Idea Score (feasibility/originality/market potential, build difficulty)."
+    }
+  },
+  "media": {
+    "icons": "lucide-react (Use for dashboard and standard actions)",
+    "images": {
+      "hero_bg": {
+        "url": "https://images.unsplash.com/photo-1517241034903-9a4c3ab12f00?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGRhcmslMjBnZW9tZXRyaWMlMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc4MTc4NTEyMHww&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract dark wavy shapes. Use as landing page hero background with heavy black gradient overlay (bg-black/80)."
+      },
+      "auth_bg": {
+        "url": "https://images.pexels.com/photos/6424583/pexels-photo-6424583.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Colorful programming code on dark screen. Use on right side of Auth split-screen, with overlay."
+      },
+      "feature_bg": {
+        "url": "https://images.pexels.com/photos/7230895/pexels-photo-7230895.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Texture of contemporary futuristic building. Use subtly inside bento grid feature cards as bg-image with opacity-10."
+      }
+    }
+  },
+  "accessibility_and_testing": {
+    "testing_attributes": "All interactive elements MUST include data-testid attribute in kebab-case based on role (e.g., data-testid='generate-plan-button').",
+    "contrast": "Text must meet 4.5:1 ratio. Hover states must explicitly set text color."
+  },
+  "instructions_to_main_agent": [
+    "Start by setting up Tailwind CSS variables in index.css matching the color_palette.",
+    "Add Google Fonts link to index.html and configure tailwind.config.js font families.",
+    "Install lucide-react, framer-motion, and shadcn/ui components: button, card, input, textarea, select, badge, progress.",
+    "Use .js/.jsx extensions for all files, NOT .tsx/.ts. Ensure proper prop drilling and no TypeScript types.",
+    "Implement navigation bar with glassmorphism surface.",
+    "Ensure the application strictly follows the Dark Theme / High-Contrast Swiss archetype."
+  ]
+}

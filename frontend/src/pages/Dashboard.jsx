@@ -3,12 +3,32 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
-import { Plus, FolderOpen, Sparkles, Trash2, Loader2 } from "lucide-react";
+import {
+  Plus,
+  FolderOpen,
+  Sparkles,
+  Trash2,
+  Loader2,
+  Layers,
+  Rocket,
+  Gauge,
+  ListChecks,
+} from "lucide-react";
 
 const STATUS_STYLES = {
   Draft: "border-zinc-500/40 text-zinc-300 bg-zinc-500/5",
   Generated: "border-indigo-400/40 text-indigo-200 bg-indigo-500/10",
   Refined: "border-emerald-400/40 text-emerald-200 bg-emerald-500/10",
+};
+
+const STAGE_STYLES = {
+  Idea: "border-zinc-500/30 text-zinc-300 bg-zinc-500/5",
+  Validating: "border-amber-400/40 text-amber-200 bg-amber-500/10",
+  Planning: "border-indigo-400/40 text-indigo-200 bg-indigo-500/10",
+  "Building MVP": "border-violet-400/40 text-violet-200 bg-violet-500/10",
+  Testing: "border-cyan-400/40 text-cyan-200 bg-cyan-500/10",
+  "Ready to Launch": "border-emerald-400/40 text-emerald-200 bg-emerald-500/10",
+  Launched: "border-lime-400/50 text-lime-200 bg-lime-500/10",
 };
 
 function relative(date) {
@@ -26,14 +46,21 @@ export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [projects, setProjects] = useState(null);
+  const [stats, setStats] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const { data } = await api.get("/projects");
-        if (!cancelled) setProjects(data);
+        const [{ data: projectsData }, { data: statsData }] = await Promise.all([
+          api.get("/projects"),
+          api.get("/dashboard/stats"),
+        ]);
+        if (!cancelled) {
+          setProjects(projectsData);
+          setStats(statsData);
+        }
       } catch {
         if (!cancelled) setProjects([]);
       }
@@ -49,6 +76,8 @@ export default function Dashboard() {
     try {
       await api.delete(`/projects/${id}`);
       setProjects((prev) => prev.filter((p) => p.id !== id));
+      const { data } = await api.get("/dashboard/stats");
+      setStats(data);
     } finally {
       setDeletingId(null);
     }
@@ -80,6 +109,63 @@ export default function Dashboard() {
             Create new project
           </Link>
         </div>
+
+        {/* Analytics row */}
+        {stats && stats.total_projects > 0 && (
+          <div
+            data-testid="dashboard-analytics"
+            className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4"
+          >
+            <StatCard
+              testId="stat-total-projects"
+              icon={Layers}
+              label="Total projects"
+              value={stats.total_projects}
+            />
+            <StatCard
+              testId="stat-ready-to-build"
+              icon={Rocket}
+              label="Ready to build"
+              value={stats.ready_to_build}
+              hint="Planning → Ready to Launch"
+            />
+            <StatCard
+              testId="stat-avg-score"
+              icon={Gauge}
+              label="Avg build score"
+              value={stats.avg_build_score == null ? "—" : `${stats.avg_build_score}%`}
+            />
+            <StatCard
+              testId="stat-launched"
+              icon={ListChecks}
+              label="Launched"
+              value={stats.by_stage?.Launched ?? 0}
+            />
+          </div>
+        )}
+
+        {/* Stage breakdown */}
+        {stats && stats.total_projects > 0 && (
+          <div
+            data-testid="dashboard-stage-breakdown"
+            className="mt-4 flex flex-wrap items-center gap-2 rounded-lg border border-white/10 bg-zinc-950 p-3"
+          >
+            <span className="mr-1 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+              By stage
+            </span>
+            {Object.entries(stats.by_stage).map(([stage, count]) => (
+              <span
+                key={stage}
+                data-testid={`stage-count-${stage.toLowerCase().replace(/\s+/g, "-")}`}
+                className={`rounded-full border px-2.5 py-0.5 text-[11px] font-mono uppercase tracking-widest ${
+                  count === 0 ? "border-white/5 text-zinc-600" : STAGE_STYLES[stage] || STAGE_STYLES.Idea
+                }`}
+              >
+                {stage} · {count}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Content */}
         <div className="mt-10">
@@ -116,6 +202,16 @@ export default function Dashboard() {
                       }`}
                     >
                       {p.status}
+                    </span>
+                  </div>
+                  <div className="mt-2">
+                    <span
+                      data-testid={`project-stage-${p.id}`}
+                      className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-mono uppercase tracking-widest ${
+                        STAGE_STYLES[p.stage] || STAGE_STYLES.Idea
+                      }`}
+                    >
+                      Stage · {p.stage || "Idea"}
                     </span>
                   </div>
                   <p className="mt-3 line-clamp-3 text-sm text-zinc-400">
@@ -155,6 +251,24 @@ export default function Dashboard() {
           )}
         </div>
       </main>
+    </div>
+  );
+}
+
+function StatCard({ icon: Icon, label, value, hint, testId }) {
+  return (
+    <div
+      data-testid={testId}
+      className="rounded-lg border border-white/10 bg-zinc-950 p-4"
+    >
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-indigo-300">
+          {label}
+        </span>
+        <Icon className="h-4 w-4 text-zinc-500" />
+      </div>
+      <div className="mt-2 font-heading text-2xl font-bold tracking-tight">{value}</div>
+      {hint && <div className="mt-1 text-[10px] text-zinc-500">{hint}</div>}
     </div>
   );
 }

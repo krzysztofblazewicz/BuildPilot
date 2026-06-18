@@ -18,6 +18,8 @@ from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
+from ai_service import get_provider as get_ai_provider
+
 # ----- MongoDB -----
 mongo_url = os.environ["MONGO_URL"]
 client = AsyncIOMotorClient(mongo_url)
@@ -139,7 +141,57 @@ class ProjectUpdate(BaseModel):
     constraints: Optional[str] = None
     notes: Optional[str] = None
     status: Optional[str] = None
+    stage: Optional[str] = None
     generated_plan: Optional[Dict[str, Any]] = None
+
+
+class StageUpdate(BaseModel):
+    stage: str
+
+
+class ChecklistItemUpdate(BaseModel):
+    id: str
+    done: bool
+
+
+class ChecklistUpdate(BaseModel):
+    items: List[Dict[str, Any]]
+
+
+PROJECT_STAGES = [
+    "Idea",
+    "Validating",
+    "Planning",
+    "Building MVP",
+    "Testing",
+    "Ready to Launch",
+    "Launched",
+]
+
+
+DEFAULT_CHECKLIST = [
+    {"id": "define-target-user", "label": "Define target user", "done": False},
+    {"id": "identify-main-problem", "label": "Identify main problem", "done": False},
+    {"id": "list-competitors", "label": "List competitors or alternatives", "done": False},
+    {"id": "create-landing-page", "label": "Create landing page", "done": False},
+    {"id": "speak-to-5-users", "label": "Speak to 5 potential users", "done": False},
+    {"id": "build-mvp", "label": "Build MVP", "done": False},
+    {"id": "test-with-users", "label": "Test with users", "done": False},
+    {"id": "collect-feedback", "label": "Collect feedback", "done": False},
+    {"id": "improve-based-on-feedback", "label": "Improve based on feedback", "done": False},
+    {"id": "prepare-launch", "label": "Prepare launch", "done": False},
+]
+
+
+def _with_project_defaults(project: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """Backfill stage + checklist on read so existing projects keep working."""
+    if not project:
+        return project
+    if not project.get("stage"):
+        project["stage"] = "Idea"
+    if not project.get("checklist"):
+        project["checklist"] = [dict(item) for item in DEFAULT_CHECKLIST]
+    return project
 
 
 # ----- Mock Plan Generator -----
@@ -171,6 +223,9 @@ def generate_mock_plan(p: Dict[str, Any]) -> Dict[str, Any]:
     feasibility = 55 + (seed % 40)
     originality = 45 + ((seed >> 3) % 45)
     market = 50 + ((seed >> 6) % 45)
+    technical_complexity = 30 + ((seed >> 12) % 60)
+    speed_to_mvp = 40 + ((seed >> 15) % 55)
+    monetisation_potential = 35 + ((seed >> 18) % 60)
     difficulty = DIFFICULTIES[(seed >> 9) % 3]
     if skill == "Beginner" and difficulty == "Hard":
         difficulty = "Medium"
@@ -270,6 +325,9 @@ def generate_mock_plan(p: Dict[str, Any]) -> Dict[str, Any]:
             "originality": originality,
             "market_potential": market,
             "difficulty": difficulty,
+            "technical_complexity": technical_complexity,
+            "speed_to_mvp": speed_to_mvp,
+            "monetisation_potential": monetisation_potential,
         },
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -336,7 +394,7 @@ def _project_title(idea: str) -> str:
 async def list_projects(current=Depends(get_current_user)):
     cursor = db.projects.find({"user_id": current["id"]}, {"_id": 0}).sort("updated_at", -1)
     items = await cursor.to_list(500)
-    return items
+    return [_with_project_defaults(p) for p in items]
 
 
 @api_router.post("/projects")
@@ -350,6 +408,8 @@ async def create_project(payload: ProjectIn, current=Depends(get_current_user)):
         **payload.model_dump(),
         "generated_plan": None,
         "status": "Draft",
+        "stage": "Idea",
+        "checklist": [dict(item) for item in DEFAULT_CHECKLIST],
         "created_at": now,
         "updated_at": now,
     }
@@ -373,7 +433,154 @@ async def generate_plan(project_id: str, current=Depends(get_current_user)):
     project["status"] = "Generated"
     project["title"] = plan["refined_name"]
     project["updated_at"] = now
+    return _with_project_defaults(project)
+
+
+# ----- Phase 1: stage update -----
+@api_router.put("/projects/{project_id}/stage")
+async def update_project_stage(project_id: str, payload: StageUpdate, current=Depends(get_current_user)):
+    if payload.stage not in PROJECT_STAGES:
+        raise HTTPException(status_code=400, detail=f"Invalid stage. Allowed: {PROJECT_STAGES}")
+    res = await db.projects.update_one(
+        {"id": project_id, "user_id": current["id"]},
+        {"$set": {"stage": payload.stage, "updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Project not found")
+    project = await db.projects.find_one({"id": project_id}, {"_id": 0})
+    return _with_project_defaults(project)
+
+
+# ----- Phase 2: checklist update -----
+@api_router.put("/projects/{project_id}/checklist")
+async def update_project_checklist(
+    project_id: str, payload: ChecklistUpdate, current=Depends(get_current_user)
+):
+    # Normalize: ensure each item has id, label, done
+    normalized = []
+    for item in payload.items:
+        if "id" not in item or "label" not in item:
+            raise HTTPException(status_code=400, detail="Each checklist item needs id and label")
+        normalized.append(
+            {"id": str(item["id"]), "label": str(item["label"]), "done": bool(item.get("done"))}
+        )
+    res = await db.projects.update_one(
+        {"id": project_id, "user_id": current["id"]},
+        {"$set": {"checklist": normalized, "updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Project not found")
+    project = await db.projects.find_one({"id": project_id}, {"_id": 0})
+    return _with_project_defaults(project)
+
+
+# ----- Phase 3: optional AI mode panels -----
+async def _load_project_for_ai(project_id: str, user_id: str) -> Dict[str, Any]:
+    project = await db.projects.find_one({"id": project_id, "user_id": user_id}, {"_id": 0})
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
     return project
+
+
+@api_router.post("/ai/refine-idea")
+async def ai_refine_idea(payload: Dict[str, Any], current=Depends(get_current_user)):
+    project = await _load_project_for_ai(payload.get("project_id", ""), current["id"])
+    return get_ai_provider().refine_idea(project)
+
+
+@api_router.post("/ai/build-mvp")
+async def ai_build_mvp(payload: Dict[str, Any], current=Depends(get_current_user)):
+    project = await _load_project_for_ai(payload.get("project_id", ""), current["id"])
+    return get_ai_provider().build_mvp(project)
+
+
+@api_router.post("/ai/tech-stack")
+async def ai_tech_stack(payload: Dict[str, Any], current=Depends(get_current_user)):
+    project = await _load_project_for_ai(payload.get("project_id", ""), current["id"])
+    return get_ai_provider().tech_stack(project)
+
+
+@api_router.post("/ai/check-risks")
+async def ai_check_risks(payload: Dict[str, Any], current=Depends(get_current_user)):
+    project = await _load_project_for_ai(payload.get("project_id", ""), current["id"])
+    return get_ai_provider().check_risks(project)
+
+
+@api_router.post("/ai/launch-plan")
+async def ai_launch_plan(payload: Dict[str, Any], current=Depends(get_current_user)):
+    project = await _load_project_for_ai(payload.get("project_id", ""), current["id"])
+    return get_ai_provider().launch_plan(project)
+
+
+@api_router.post("/ai/generate-pitch")
+async def ai_generate_pitch(payload: Dict[str, Any], current=Depends(get_current_user)):
+    project = await _load_project_for_ai(payload.get("project_id", ""), current["id"])
+    return get_ai_provider().generate_pitch(project)
+
+
+# ----- Phase 7: dashboard analytics -----
+@api_router.get("/dashboard/stats")
+async def dashboard_stats(current=Depends(get_current_user)):
+    cursor = db.projects.find({"user_id": current["id"]}, {"_id": 0})
+    projects = await cursor.to_list(1000)
+    projects = [_with_project_defaults(p) for p in projects]
+
+    total = len(projects)
+    by_stage = {stage: 0 for stage in PROJECT_STAGES}
+    score_keys = [
+        "feasibility",
+        "originality",
+        "market_potential",
+        "technical_complexity",
+        "speed_to_mvp",
+        "monetisation_potential",
+    ]
+    score_sums = {k: 0 for k in score_keys}
+    score_counts = {k: 0 for k in score_keys}
+    overall_sum = 0
+    overall_count = 0
+    ready_to_build = 0
+    for p in projects:
+        stage = p.get("stage", "Idea")
+        if stage in by_stage:
+            by_stage[stage] += 1
+        if p.get("generated_plan"):
+            score = p["generated_plan"].get("score") or {}
+            project_overall = []
+            for k in score_keys:
+                v = score.get(k)
+                if isinstance(v, (int, float)):
+                    score_sums[k] += v
+                    score_counts[k] += 1
+                    project_overall.append(v)
+            if project_overall:
+                overall_sum += sum(project_overall) / len(project_overall)
+                overall_count += 1
+        if stage in ("Planning", "Building MVP", "Testing", "Ready to Launch"):
+            ready_to_build += 1
+
+    averages = {k: (round(score_sums[k] / score_counts[k]) if score_counts[k] else None) for k in score_keys}
+    avg_build_score = round(overall_sum / overall_count) if overall_count else None
+
+    recent = sorted(projects, key=lambda p: p.get("updated_at", ""), reverse=True)[:5]
+    recent_compact = [
+        {
+            "id": p["id"],
+            "title": p.get("title"),
+            "stage": p.get("stage", "Idea"),
+            "status": p.get("status"),
+            "updated_at": p.get("updated_at"),
+        }
+        for p in recent
+    ]
+    return {
+        "total_projects": total,
+        "by_stage": by_stage,
+        "score_averages": averages,
+        "avg_build_score": avg_build_score,
+        "ready_to_build": ready_to_build,
+        "recent": recent_compact,
+    }
 
 
 @api_router.get("/projects/{project_id}")
@@ -381,7 +588,7 @@ async def get_project(project_id: str, current=Depends(get_current_user)):
     project = await db.projects.find_one({"id": project_id, "user_id": current["id"]}, {"_id": 0})
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
-    return project
+    return _with_project_defaults(project)
 
 
 @api_router.put("/projects/{project_id}")
@@ -390,10 +597,12 @@ async def update_project(project_id: str, payload: ProjectUpdate, current=Depend
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
     update = {k: v for k, v in payload.model_dump(exclude_unset=True).items() if v is not None}
+    if "stage" in update and update["stage"] not in PROJECT_STAGES:
+        raise HTTPException(status_code=400, detail=f"Invalid stage. Allowed: {PROJECT_STAGES}")
     update["updated_at"] = datetime.now(timezone.utc).isoformat()
     await db.projects.update_one({"id": project_id}, {"$set": update})
     updated = await db.projects.find_one({"id": project_id}, {"_id": 0})
-    return updated
+    return _with_project_defaults(updated)
 
 
 @api_router.delete("/projects/{project_id}")

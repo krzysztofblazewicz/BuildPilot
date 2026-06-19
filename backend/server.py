@@ -614,29 +614,7 @@ async def delete_project(project_id: str, current=Depends(get_current_user)):
 
 
 # ----- Startup -----
-@app.on_event("startup")
-async def on_startup():
-    await db.users.create_index("email", unique=True)
-    await db.users.create_index("id", unique=True)
-    await db.projects.create_index("user_id")
-    await db.projects.create_index("id", unique=True)
-    # Seed admin
-    admin_email = os.environ.get("ADMIN_EMAIL", "admin@buildpilot.app").lower()
-    admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
-    existing = await db.users.find_one({"email": admin_email})
-    if existing is None:
-        await db.users.insert_one({
-            "id": str(uuid.uuid4()),
-            "email": admin_email,
-            "name": "Admin",
-            "password_hash": hash_password(admin_password),
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        })
-    elif not verify_password(admin_password, existing["password_hash"]):
-        await db.users.update_one(
-            {"email": admin_email},
-            {"$set": {"password_hash": hash_password(admin_password)}},
-        )
+
 
 
 @app.on_event("shutdown")
